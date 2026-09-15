@@ -1,9 +1,11 @@
 import logging
 import os
 from datetime import datetime, timedelta, timezone
+from typing import Annotated
 
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
+from pydantic import BeforeValidator
 
 from library_demo.adapters.graphdb.client import GraphDBClient, GraphDBClientError
 from library_demo.adapters.rdf.jsonld_mapper import map_overdue_loans
@@ -20,6 +22,18 @@ MCP_HOST = "0.0.0.0"
 MCP_PORT = 8000
 GRAPHDB_ENDPOINT_ENVIRONMENT_VARIABLE = "GRAPHDB_ENDPOINT"
 SERVICE_UNAVAILABLE_MESSAGE = "The overdue-loans service is unavailable."
+UTC_SUFFIX = " UTC"
+UTC_ISO_OFFSET = "+00:00"
+
+
+def _parse_langflow_utc_datetime(value: object) -> object:
+    """Translate Langflow's terminal UTC suffix before Pydantic parses the datetime."""
+    if isinstance(value, str) and value.endswith(UTC_SUFFIX):
+        return f"{value.removesuffix(UTC_SUFFIX)}{UTC_ISO_OFFSET}"
+    return value
+
+
+AsOfDateTime = Annotated[datetime, BeforeValidator(_parse_langflow_utc_datetime)]
 
 
 def create_mcp_server(
@@ -30,7 +44,7 @@ def create_mcp_server(
 
     @server.tool(name=OVERDUE_LOANS_TOOL_NAME)
     def get_overdue_loans(
-        library_name: str, as_of: datetime | None = None
+        library_name: str, as_of: AsOfDateTime | None = None
     ) -> OverdueLoansResult:
         """Retrieve overdue loans held by a library at an optional UTC instant."""
         if as_of is not None and as_of.utcoffset() == timedelta(0):

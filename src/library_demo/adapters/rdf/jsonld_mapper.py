@@ -53,10 +53,10 @@ OVERDUE_LOAN_FRAME = {
 
 
 def _utc_datetime(value: str) -> datetime:
-    """Parse an offset-aware timestamp as UTC."""
+    """Parse a source timestamp as UTC; offset-less RDF xsd:dateTime values mean UTC."""
     due_at = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    if due_at.utcoffset() is None:
-        raise ValueError("due_at must include an explicit UTC offset")
+    if due_at.tzinfo is None:
+        return due_at.replace(tzinfo=timezone.utc)
     return due_at.astimezone(timezone.utc)
 
 
@@ -65,7 +65,9 @@ def map_overdue_loans(graph: Graph) -> list[dict[str, object]]:
     json_ld_document = json.loads(graph.serialize(format="json-ld"))
     framed_document = jsonld.frame(json_ld_document, OVERDUE_LOAN_FRAME)
     compacted_document = jsonld.compact(framed_document, OVERDUE_LOAN_CONTEXT)
-    loans = compacted_document.get("@graph", [compacted_document])
+    loans = compacted_document.get(
+        "@graph", [compacted_document] if "@id" in compacted_document else []
+    )
 
     return sorted(
         [

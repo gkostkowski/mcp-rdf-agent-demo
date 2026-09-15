@@ -10,6 +10,8 @@ from library_demo.models.overdue_loans_result import OverdueLoansResult
 CENTRAL_LIBRARY = "Central Library"
 WEST_LIBRARY = "West Library"
 AS_OF = datetime(2026, 9, 1, 12, tzinfo=timezone.utc)
+LANGFLOW_UTC_AS_OF = "2026-09-15 21:08:11 UTC"
+EXPECTED_LANGFLOW_UTC_AS_OF = datetime(2026, 9, 15, 21, 8, 11, tzinfo=timezone.utc)
 OVERDUE_ITEMS = [
     {
         "loan_id": "loan-1",
@@ -94,6 +96,20 @@ async def test_get_overdue_loans_returns_a_structured_pydantic_result(mcp_server
     assert result.library_name == CENTRAL_LIBRARY
     assert result.as_of == AS_OF
     assert result.items[0].book_copy_id == "COPY-001"
+
+
+@pytest.mark.anyio
+async def test_get_overdue_loans_accepts_the_langflow_utc_datetime_format(
+    mcp_server,
+) -> None:
+    async with Client(mcp_server) as client:
+        response = await client.call_tool(
+            "get_overdue_loans",
+            {"library_name": CENTRAL_LIBRARY, "as_of": LANGFLOW_UTC_AS_OF},
+        )
+
+    result = OverdueLoansResult.model_validate(response.structured_content)
+    assert result.as_of == EXPECTED_LANGFLOW_UTC_AS_OF
 
 
 @pytest.mark.anyio

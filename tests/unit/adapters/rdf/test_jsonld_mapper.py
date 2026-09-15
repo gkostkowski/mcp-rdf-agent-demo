@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 from pathlib import Path
 
-import pytest
 from rdflib import Graph, Literal, Namespace
 from rdflib.namespace import XSD
 
@@ -13,6 +12,10 @@ EXPECTED_DUE_AT = datetime(2026, 8, 15, 23, 59, 59, tzinfo=timezone.utc)
 DATA = Namespace("http://library-demo.com/data#")
 LIBRARY = Namespace("http://library-demo.com/ontology#")
 TIMEZONELESS_DUE_AT = Literal("2026-08-15T23:59:59", datatype=XSD.dateTime)
+
+
+def test_map_overdue_loans_returns_no_loans_for_an_empty_graph() -> None:
+    assert map_overdue_loans(Graph()) == []
 
 
 def test_map_overdue_loans_maps_the_complete_overdue_projection() -> None:
@@ -30,10 +33,9 @@ def test_map_overdue_loans_maps_the_complete_overdue_projection() -> None:
     ]
 
 
-def test_map_overdue_loans_rejects_a_timezone_less_due_at() -> None:
+def test_map_overdue_loans_interprets_a_timezone_less_due_at_as_utc() -> None:
     graph = Graph().parse(FIXTURE_FILE, format="turtle")
     graph.remove((DATA.aliceCentralLoanOverdue, LIBRARY.dueAt, None))
     graph.add((DATA.aliceCentralLoanOverdue, LIBRARY.dueAt, TIMEZONELESS_DUE_AT))
 
-    with pytest.raises(ValueError, match="explicit UTC offset"):
-        map_overdue_loans(graph)
+    assert map_overdue_loans(graph)[0]["due_at"] == EXPECTED_DUE_AT
