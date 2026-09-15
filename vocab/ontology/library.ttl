@@ -1,0 +1,232 @@
+@prefix : <http://library-demo.com/ontology#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Admin a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    rdfs:subClassOf :User ;
+    skos:prefLabel "Admin"@en .
+
+:Author a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    rdfs:subClassOf person:Person ;
+    skos:prefLabel "Author"@en .
+
+:Book a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "A bibliographic record representing a particular published edition. It may have one or more known authors, or no identified author when the author is unknown or the publication is anonymous."@en ;
+    skos:prefLabel "Book"@en .
+
+:BookCopy a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "An individual physical copy of a Book held by one Library. Alternative name: BookInstance"@en ;
+    skos:prefLabel "Book Copy"@en .
+
+:BookCopyAvailabilityStatus a skos:ConceptScheme ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "The derived availability of a BookCopy. AVAILABLE means it is in circulation and has no open Loan. ON_LOAN means it has an open Loan. UNAVAILABLE means it is not otherwise available."@en ;
+    skos:prefLabel "Book Copy Availability Status"@en .
+
+:BookCopyOperationalStatus a skos:ConceptScheme ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "Book Copy Operational Status"@en .
+
+:Borrower a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    rdfs:subClassOf :User ;
+    skos:prefLabel "Borrower"@en .
+
+:ISBN a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "ISBN"@en .
+
+:Library a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "A library branch or division that holds book copies and issues library memberships."@en ;
+    skos:prefLabel "Library"@en .
+
+:LibraryMembership a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "Library Membership"@en .
+
+:Loan a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "A record of one BookCopy being borrowed under one LibraryMembership for a period of time. A BookCopy may have at most one open Loan at a time. An open Loan is a Loan for which returnedAt has no value. Temporal invariants: - borrowedAt &lt; dueAt - returnedAt &gt;= borrowedAt, when returnedAt exists."@en ;
+    skos:prefLabel "Loan"@en .
+
+:belongsToBorrower a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "belongs To Borrower"@en .
+
+:bookCopyId a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "book Copy Id"@en .
+
+:borrowedAt a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "borrowed At"@en .
+
+:cardId a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "card Id"@en .
+
+:dueAt a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "due At"@en .
+
+:edition a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "edition"@en .
+
+:genre a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "genre"@en .
+
+:hasBookCopyAvailabilityStatus a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "has Book Copy Availability Status"@en .
+
+:hasBookCopyOperationalStatus a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "has Book Copy Operational Status"@en .
+
+:hasCopy a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "has Copy"@en .
+
+:hasLoan a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "has Loan"@en .
+
+:hasMembership a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "has Membership"@en .
+
+:heldByLibrary a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "held By Library"@en .
+
+:isRepresentedBy a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "is Represented By"@en .
+
+:issuedBy a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "issued By"@en .
+
+:issues a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "issues"@en .
+
+:lateFeePerDay a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "Fine for keeping a borrowed book copy past its due date, expressed in USD. (Library)"@en ;
+    skos:prefLabel "late Fee Per Day"@en .
+
+:loanMaxDuration a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "The maximum number of days for which a Book Copy may be borrowed before it must be returned. (Library)"@en ;
+    skos:prefLabel "loan Max Duration"@en .
+
+:loanedCopy a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "loaned Copy"@en .
+
+:location a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "location"@en .
+
+:madeUnderMembership a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "made Under Membership"@en .
+
+:maxConcurrentLoans a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:definition "The maximum number of active Loans a Borrower may have at this Library at the same time. (Library)"@en ;
+    skos:prefLabel "max Concurrent Loans"@en .
+
+:name a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "name"@en .
+
+:publicationYear a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "publication Year"@en .
+
+:publisher a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "publisher"@en .
+
+:represents a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "represents"@en .
+
+:returnedAt a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "returned At"@en .
+
+:title a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "title"@en .
+
+:usedForLoan a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "used For Loan"@en .
+
+:validFrom a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "valid From"@en .
+
+:validUntil a rdf:Property ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "valid Until"@en .
+
+:writes a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "writes"@en .
+
+:writtenBy a owl:ObjectProperty ;
+    rdfs:isDefinedBy :core ;
+    skos:prefLabel "written By"@en .
+
+dcterms:identifier a rdf:Property ;
+    skos:prefLabel "identifier"@en .
+
+locn:Address a skos:ConceptScheme ;
+    skos:prefLabel "Address"@en .
+
+person:fullName a rdf:Property ;
+    skos:prefLabel "full Name"@en .
+
+:User a owl:Class ;
+    rdfs:isDefinedBy :core ;
+    rdfs:subClassOf person:Person ;
+    skos:definition "A person registered to use the library system."@en ;
+    skos:prefLabel "User"@en .
+
+person:Person a owl:Class ;
+    skos:prefLabel "Person"@en .
+
+:core a owl:Ontology ;
+    dcterms:created "2026-07-09"^^xsd:date ;
+    dcterms:issued "2026-09-15"^^xsd:date ;
+    dcterms:license "CC BY 4.0" ;
+    dcterms:publisher "GK" ;
+    dcterms:title "Library demo core"@en ;
+    vann:preferredNamespacePrefix "lib" ;
+    vann:preferredNamespaceUri "http://library-demo.com/ontology#" ;
+    rdfs:comment "This version is automatically generated from library.xml on 2026-09-15" ;
+    owl:imports <http://data.europa.eu/m8g>,
+        dcterms:,
+        skos:,
+        <http://www.w3.org/ns/adms> ;
+    owl:versionIRI :core-1.0.0 ;
+    owl:versionInfo "1.0.0" .
+

@@ -1,0 +1,167 @@
+@prefix : <http://library-demo.com/ontology#> .
+@prefix data: <http://library-demo.com/data#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ----------------------------------------------------------------------------
+# People
+# ----------------------------------------------------------------------------
+
+data:alice
+    a :Borrower, :User, person:Person ;
+    dcterms:identifier "user-alice" ;
+    person:fullName "Alice Adams" ;
+    :hasMembership data:aliceMembershipCentral, data:aliceMembershipWest .
+
+data:bob
+    a :Author, person:Person ;
+    dcterms:identifier "user-bob" ;
+    person:fullName "Bob Brown" ;
+    :writes data:bookEdition1 .
+
+data:carol
+    a :Author, person:Person ;
+    person:fullName "Carol Clark" ;
+    :writes data:bookEdition1, data:bookEdition2 .
+
+# ----------------------------------------------------------------------------
+# Libraries and addresses
+# ----------------------------------------------------------------------------
+
+data:centralLibrary
+    a :Library ;
+    :name "Central Library" ;
+    :lateFeePerDay "0.50"^^xsd:decimal ;
+    :loanMaxDuration "14"^^xsd:int ;
+    :maxConcurrentLoans "5"^^xsd:int ;
+    :location data:centralAddress ;
+    :hasCopy data:copy1 ;
+    :issues data:aliceMembershipCentral .
+
+data:westLibrary
+    a :Library ;
+    :name "West Library" ;
+    :lateFeePerDay "0.75"^^xsd:decimal ;
+    :loanMaxDuration "21"^^xsd:int ;
+    :maxConcurrentLoans "4"^^xsd:int ;
+    :location data:westAddress ;
+    :hasCopy data:copy2 ;
+    :issues data:aliceMembershipWest .
+
+data:centralAddress
+    a locn:Address ;
+    locn:fullAddress "1 Main Street, Springfield, USA"@en .
+
+data:westAddress
+    a locn:Address ;
+    locn:fullAddress "20 West Street, Springfield, USA"@en .
+
+# ----------------------------------------------------------------------------
+# Books and physical copies
+# Two Book instances intentionally share the same title.
+# bookEdition1 has two authors and two physical copies.
+# ----------------------------------------------------------------------------
+
+data:bookEdition1
+    a :Book ;
+    :title "Knowledge Graphs in Practice" ;
+    :edition "1st" ;
+    :ISBN "9780000000001" ;
+    :publicationYear "2025"^^xsd:int ;
+    :publisher "Example Press" ;
+    :genre "Technology" ;
+    :writtenBy data:bob, data:carol ;
+    :isRepresentedBy data:copy1, data:copy2 .
+
+data:bookEdition2
+    a :Book ;
+    :title "Knowledge Graphs in Practice" ;
+    :edition "2nd" ;
+    :ISBN "9780000000002" ;
+    :publicationYear "2026"^^xsd:int ;
+    :publisher "Example Press" ;
+    :genre "Technology" ;
+    :writtenBy data:carol .
+
+data:copy1
+    a :BookCopy ;
+    :bookCopyId "COPY-001" ;
+    :represents data:bookEdition1 ;
+    :heldByLibrary data:centralLibrary ;
+    :hasBookCopyOperationalStatus data:inCirculation ;
+    :hasBookCopyAvailabilityStatus data:onLoan ;
+    :hasLoan data:aliceCentralLoanOverdue .
+
+data:copy2
+    a :BookCopy ;
+    :bookCopyId "COPY-002" ;
+    :represents data:bookEdition1 ;
+    :heldByLibrary data:westLibrary ;
+    :hasBookCopyOperationalStatus data:inCirculation ;
+    :hasBookCopyAvailabilityStatus data:available ;
+    :hasLoan data:aliceWestLoanReturned .
+
+# ----------------------------------------------------------------------------
+# Memberships
+# ----------------------------------------------------------------------------
+
+data:aliceMembershipCentral
+    a :LibraryMembership ;
+    :cardId "CARD-C-001" ;
+    :validFrom "2026-01-01T00:00:00"^^xsd:dateTime ;
+    :validUntil "2027-01-01T00:00:00"^^xsd:dateTime ;
+    :belongsToBorrower data:alice ;
+    :issuedBy data:centralLibrary ;
+    :usedForLoan data:aliceCentralLoanOverdue .
+
+data:aliceMembershipWest
+    a :LibraryMembership ;
+    :cardId "CARD-W-001" ;
+    :validFrom "2026-01-01T00:00:00"^^xsd:dateTime ;
+    :validUntil "2027-01-01T00:00:00"^^xsd:dateTime ;
+    :belongsToBorrower data:alice ;
+    :issuedBy data:westLibrary ;
+    :usedForLoan data:aliceWestLoanReturned .
+
+# ----------------------------------------------------------------------------
+# Loans
+# aliceCentralLoanOverdue is intentionally open and overdue.
+# aliceWestLoanReturned is a completed historical loan.
+# ----------------------------------------------------------------------------
+
+data:aliceCentralLoanOverdue
+    a :Loan ;
+    :borrowedAt "2026-08-01T10:00:00"^^xsd:dateTime ;
+    :dueAt "2026-08-15T23:59:59"^^xsd:dateTime ;
+    :madeUnderMembership data:aliceMembershipCentral ;
+    :loanedCopy data:copy1 .
+
+data:aliceWestLoanReturned
+    a :Loan ;
+    :borrowedAt "2026-07-01T10:00:00"^^xsd:dateTime ;
+    :dueAt "2026-07-15T23:59:59"^^xsd:dateTime ;
+    :returnedAt "2026-07-14T16:30:00"^^xsd:dateTime ;
+    :madeUnderMembership data:aliceMembershipWest ;
+    :loanedCopy data:copy2 .
+
+# ----------------------------------------------------------------------------
+# Controlled values used by the smoke data
+# ----------------------------------------------------------------------------
+
+data:available
+    a :BookCopyAvailabilityStatus ;
+    skos:inScheme :BookCopyAvailabilityStatus ;
+    skos:prefLabel "AVAILABLE"@en .
+
+data:onLoan
+    a :BookCopyAvailabilityStatus ;
+    skos:inScheme :BookCopyAvailabilityStatus ;
+    skos:prefLabel "ON_LOAN"@en .
+
+data:inCirculation
+    a :BookCopyOperationalStatus ;
+    skos:inScheme :BookCopyOperationalStatus ;
+    skos:prefLabel "IN_CIRCULATION"@en .

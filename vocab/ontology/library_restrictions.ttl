@@ -1,0 +1,276 @@
+@prefix : <http://library-demo.com/ontology#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:belongsToBorrower rdfs:domain :LibraryMembership ;
+    rdfs:range :Borrower .
+
+:core-restriction a owl:Ontology ;
+    dcterms:created "2026-07-09"^^xsd:date ;
+    dcterms:issued "2026-09-15"^^xsd:date ;
+    dcterms:license "CC BY 4.0" ;
+    dcterms:publisher "GK" ;
+    dcterms:title "Library demo restrictions"@en ;
+    vann:preferredNamespacePrefix "lib" ;
+    vann:preferredNamespaceUri "http://library-demo.com/ontology#" ;
+    rdfs:comment "This version is automatically generated from library.xml on 2026-09-15" ;
+    owl:imports <http://data.europa.eu/m8g>,
+        :core,
+        dcterms:,
+        skos:,
+        <http://www.w3.org/ns/adms> ;
+    owl:versionIRI :core-restriction-1.0.0 ;
+    owl:versionInfo "1.0.0" .
+
+:hasBookCopyAvailabilityStatus rdfs:domain :BookCopy ;
+    rdfs:range skos:Concept .
+
+:hasBookCopyOperationalStatus rdfs:domain :BookCopy ;
+    rdfs:range skos:Concept .
+
+:hasCopy rdfs:domain :Library ;
+    rdfs:range :BookCopy .
+
+:hasLoan rdfs:domain :BookCopy ;
+    rdfs:range :Loan .
+
+:isRepresentedBy rdfs:domain :Book ;
+    rdfs:range :BookCopy .
+
+:issuedBy rdfs:domain :LibraryMembership ;
+    rdfs:range :Library .
+
+:issues rdfs:domain :Library ;
+    rdfs:range :LibraryMembership .
+
+:loanedCopy rdfs:domain :Loan ;
+    rdfs:range :BookCopy .
+
+:location rdfs:domain :Library ;
+    rdfs:range skos:Concept .
+
+:usedForLoan rdfs:domain :LibraryMembership ;
+    rdfs:range :Loan .
+
+:writtenBy rdfs:domain :Book ;
+    rdfs:range :Author .
+
+:BookCopyAvailabilityStatus a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    owl:equivalentClass [ a owl:Restriction ;
+            owl:hasValue :BookCopyAvailabilityStatus ;
+            owl:onProperty skos:inScheme ] .
+
+:BookCopyOperationalStatus a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    owl:equivalentClass [ a owl:Restriction ;
+            owl:hasValue :BookCopyOperationalStatus ;
+            owl:onProperty skos:inScheme ] .
+
+:ISBN a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :String .
+
+:User rdfs:subClassOf [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty dcterms:identifier ;
+            owl:qualifiedCardinality 1 ] .
+
+:bookCopyId a owl:FunctionalProperty ;
+    rdfs:domain :BookCopy ;
+    rdfs:range :String .
+
+:borrowedAt a owl:FunctionalProperty ;
+    rdfs:domain :Loan ;
+    rdfs:range :DateTime .
+
+:cardId a owl:FunctionalProperty ;
+    rdfs:domain :LibraryMembership ;
+    rdfs:range :String .
+
+:dueAt a owl:FunctionalProperty ;
+    rdfs:domain :Loan ;
+    rdfs:range :DateTime .
+
+:edition a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :String .
+
+:genre a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :String .
+
+:hasMembership rdfs:domain :Borrower ;
+    rdfs:range :LibraryMembership .
+
+:heldByLibrary a owl:FunctionalProperty ;
+    rdfs:domain :BookCopy ;
+    rdfs:range :Library .
+
+:lateFeePerDay a owl:FunctionalProperty ;
+    rdfs:domain :Library ;
+    rdfs:range :decimal .
+
+:loanMaxDuration a owl:FunctionalProperty ;
+    rdfs:domain :Library ;
+    rdfs:range :int .
+
+:madeUnderMembership a owl:FunctionalProperty ;
+    rdfs:domain :Loan ;
+    rdfs:range :LibraryMembership .
+
+:maxConcurrentLoans a owl:FunctionalProperty ;
+    rdfs:domain :Library ;
+    rdfs:range :int .
+
+:name a owl:FunctionalProperty ;
+    rdfs:domain :Library ;
+    rdfs:range :String .
+
+:publicationYear a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :int .
+
+:publisher a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :String .
+
+:represents a owl:FunctionalProperty ;
+    rdfs:domain :BookCopy ;
+    rdfs:range :Book .
+
+:returnedAt rdfs:domain :Loan ;
+    rdfs:range :DateTime .
+
+:title a owl:FunctionalProperty ;
+    rdfs:domain :Book ;
+    rdfs:range :String .
+
+:validFrom a owl:FunctionalProperty ;
+    rdfs:domain :LibraryMembership ;
+    rdfs:range :DateTime .
+
+:validUntil rdfs:domain :LibraryMembership ;
+    rdfs:range :DateTime .
+
+:writes rdfs:domain :Author ;
+    rdfs:range :Book .
+
+dcterms:identifier a owl:FunctionalProperty ;
+    rdfs:domain :User ;
+    rdfs:range :String .
+
+locn:Address a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    owl:equivalentClass [ a owl:Restriction ;
+            owl:hasValue locn:Address ;
+            owl:onProperty skos:inScheme ] .
+
+person:Person rdfs:subClassOf [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty person:fullName ;
+            owl:qualifiedCardinality 1 ] .
+
+person:fullName a owl:FunctionalProperty ;
+    rdfs:domain person:Person ;
+    rdfs:range :String .
+
+:Author rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :writes ;
+            owl:someValuesFrom :Book ] .
+
+:Borrower rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :hasMembership ;
+            owl:someValuesFrom :LibraryMembership ] .
+
+:Loan rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxQualifiedCardinality 1 ;
+            owl:onDataRange :DateTime ;
+            owl:onProperty :returnedAt ],
+        [ a owl:Restriction ;
+            owl:onDataRange :DateTime ;
+            owl:onProperty :dueAt ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :DateTime ;
+            owl:onProperty :borrowedAt ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onClass :LibraryMembership ;
+            owl:onProperty :madeUnderMembership ;
+            owl:qualifiedCardinality 1 ] .
+
+:BookCopy rdfs:subClassOf [ a owl:Restriction ;
+            owl:onClass :Book ;
+            owl:onProperty :represents ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onClass :Library ;
+            owl:onProperty :heldByLibrary ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :bookCopyId ;
+            owl:qualifiedCardinality 1 ] .
+
+:Library rdfs:subClassOf [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :name ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :int ;
+            owl:onProperty :maxConcurrentLoans ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :int ;
+            owl:onProperty :loanMaxDuration ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :decimal ;
+            owl:onProperty :lateFeePerDay ;
+            owl:qualifiedCardinality 1 ] .
+
+:LibraryMembership rdfs:subClassOf [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :cardId ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality 1 ;
+            owl:onDataRange :DateTime ;
+            owl:onProperty :validUntil ],
+        [ a owl:Restriction ;
+            owl:onDataRange :DateTime ;
+            owl:onProperty :validFrom ;
+            owl:qualifiedCardinality 1 ] .
+
+:Book rdfs:subClassOf [ a owl:Restriction ;
+            owl:onDataRange :int ;
+            owl:onProperty :publicationYear ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :edition ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :ISBN ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :title ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :genre ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onDataRange :String ;
+            owl:onProperty :publisher ;
+            owl:qualifiedCardinality 1 ] .
+

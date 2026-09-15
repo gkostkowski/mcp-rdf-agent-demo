@@ -1,0 +1,73 @@
+@prefix lib: <http://library-demo.com/ontology#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# -----------------------------------------------------------------------------
+# Book copy availability status
+# -----------------------------------------------------------------------------
+
+lib:BookCopyAvailabilityStatus
+    a skos:ConceptScheme ;
+    rdfs:isDefinedBy lib:core ;
+    skos:prefLabel "Book Copy Availability Status"@en ;
+    skos:definition "The derived availability of a BookCopy. AVAILABLE means it is in circulation and has no open Loan. ON_LOAN means it has an open Loan. UNAVAILABLE means it is not otherwise available."@en ;
+    skos:hasTopConcept
+        lib:AVAILABLE,
+        lib:ON_LOAN,
+        lib:UNAVAILABLE .
+
+lib:AVAILABLE
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyAvailabilityStatus ;
+    skos:topConceptOf lib:BookCopyAvailabilityStatus ;
+    skos:prefLabel "AVAILABLE"@en .
+
+lib:ON_LOAN
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyAvailabilityStatus ;
+    skos:topConceptOf lib:BookCopyAvailabilityStatus ;
+    skos:prefLabel "ON_LOAN"@en .
+
+lib:UNAVAILABLE
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyAvailabilityStatus ;
+    skos:topConceptOf lib:BookCopyAvailabilityStatus ;
+    skos:prefLabel "UNAVAILABLE"@en .
+
+# -----------------------------------------------------------------------------
+# Book copy operational status
+# -----------------------------------------------------------------------------
+
+lib:BookCopyOperationalStatus
+    a skos:ConceptScheme ;
+    rdfs:isDefinedBy lib:core ;
+    skos:prefLabel "Book Copy Operational Status"@en ;
+    skos:hasTopConcept
+        lib:IN_CIRCULATION,
+        lib:WITHDRAWN,
+        lib:DAMAGED,
+        lib:LOST .
+
+lib:IN_CIRCULATION
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyOperationalStatus ;
+    skos:topConceptOf lib:BookCopyOperationalStatus ;
+    skos:prefLabel "IN_CIRCULATION"@en .
+
+lib:WITHDRAWN
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyOperationalStatus ;
+    skos:topConceptOf lib:BookCopyOperationalStatus ;
+    skos:prefLabel "WITHDRAWN"@en .
+
+lib:DAMAGED
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyOperationalStatus ;
+    skos:topConceptOf lib:BookCopyOperationalStatus ;
+    skos:prefLabel "DAMAGED"@en .
+
+lib:LOST
+    a skos:Concept ;
+    skos:inScheme lib:BookCopyOperationalStatus ;
+    skos:topConceptOf lib:BookCopyOperationalStatus ;
+    skos:prefLabel "LOST"@en .
