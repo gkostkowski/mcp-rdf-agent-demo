@@ -1,0 +1,24 @@
+@prefix data: <http://library-demo.com/data#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix lib: <http://library-demo.com/ontology#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+data:aliceCentralLoanOverdue a lib:Loan ;
+    lib:loanedCopy data:copy1 ;
+    lib:dueAt "2026-08-15T23:59:59Z"^^xsd:dateTime ;
+    lib:madeUnderMembership data:aliceCentralMembership .
+
+data:copy1 a lib:BookCopy ;
+    lib:bookCopyId "COPY-001" ;
+    lib:represents data:bookEdition1 .
+
+data:bookEdition1 a lib:Book ;
+    lib:title "Knowledge Graphs in Practice" .
+
+data:aliceCentralMembership a lib:LibraryMembership ;
+    lib:belongsToBorrower data:alice .
+
+data:alice a lib:Borrower ;
+    dcterms:identifier "user-alice" ;
+    person:fullName "Alice Adams" .
