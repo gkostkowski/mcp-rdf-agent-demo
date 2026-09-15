@@ -1,4 +1,6 @@
-from rdflib import Graph
+from datetime import datetime
+
+from rdflib import Graph, Literal
 from SPARQLWrapper import RDFXML, SPARQLWrapper
 
 
@@ -10,10 +12,12 @@ class GraphDBClient:
     def __init__(self, endpoint_url: str) -> None:
         self._endpoint_url = endpoint_url
 
-    def construct(self, query: str) -> Graph:
+    def construct(self, query: str, bindings: dict[str, str | datetime]) -> Graph:
         try:
             client = SPARQLWrapper(self._endpoint_url)
             client.setQuery(query)
+            for name, value in bindings.items():
+                client.addParameter(f"${name}", Literal(value).n3())
             client.setReturnFormat(RDFXML)
             result = client.queryAndConvert()
         except Exception as error:

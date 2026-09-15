@@ -23,7 +23,7 @@ scenarios("../features/library_queries.feature")
 
 
 class FakeGraphClient:
-    def construct(self, query: str) -> "FakeGraph":
+    def construct(self, query: str, bindings: dict[str, str | datetime]) -> "FakeGraph":
         return FakeGraph()
 
 

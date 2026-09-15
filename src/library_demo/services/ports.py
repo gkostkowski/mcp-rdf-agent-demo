@@ -1,4 +1,8 @@
+from datetime import datetime
 from typing import Protocol
+
+
+GraphBindingValue = str | datetime
 
 
 class ConstructedGraph(Protocol):
@@ -6,8 +10,10 @@ class ConstructedGraph(Protocol):
 
 
 class GraphConstructor(Protocol):
-    def construct(self, query: str) -> ConstructedGraph:
-        """Execute a CONSTRUCT query and return its RDF graph."""
+    def construct(
+        self, query: str, bindings: dict[str, GraphBindingValue]
+    ) -> ConstructedGraph:
+        """Execute a CONSTRUCT query with named bindings and return its RDF graph."""
 
 
 class GraphResultMapper(Protocol):

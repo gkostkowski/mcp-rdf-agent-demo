@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 import library_demo.services.overdue_loans as overdue_loans
-from library_demo.queries.templates import render_overdue_loans
+from library_demo.queries.templates import load_overdue_loans_query
 
 
 CENTRAL_LIBRARY = "Central Library"
@@ -31,9 +31,11 @@ class FakeGraphClient:
     def __init__(self) -> None:
         self.graph = FakeGraph()
         self.queries: list[str] = []
+        self.bindings: list[dict[str, str | datetime]] = []
 
-    def construct(self, query: str) -> "FakeGraph":
+    def construct(self, query: str, bindings: dict[str, str | datetime]) -> "FakeGraph":
         self.queries.append(query)
+        self.bindings.append(bindings)
         return self.graph
 
 
@@ -73,7 +75,8 @@ def test_get_overdue_loans_returns_complete_central_library_result() -> None:
     assert result.as_of == AS_OF
     assert result.items[0].borrower_name == "Alice Adams"
     assert result.items[0].book_copy_id == "COPY-001"
-    assert graph_client.queries == [render_overdue_loans(CENTRAL_LIBRARY, AS_OF)]
+    assert graph_client.queries == [load_overdue_loans_query()]
+    assert graph_client.bindings == [{"library_name": CENTRAL_LIBRARY, "as_of": AS_OF}]
     assert result_mapper.graphs == [graph_client.graph]
 
 
@@ -91,10 +94,11 @@ def test_get_overdue_loans_returns_empty_result_for_west_library() -> None:
     assert result.library_name == WEST_LIBRARY
     assert result.as_of == AS_OF
     assert result.items == []
-    assert graph_client.queries == [render_overdue_loans(WEST_LIBRARY, AS_OF)]
+    assert graph_client.queries == [load_overdue_loans_query()]
+    assert graph_client.bindings == [{"library_name": WEST_LIBRARY, "as_of": AS_OF}]
 
 
-def test_get_overdue_loans_normalizes_library_name_before_rendering_query() -> None:
+def test_get_overdue_loans_normalizes_library_name_before_binding_it() -> None:
     graph_client = FakeGraphClient()
     result_mapper = FakeResultMapper([])
 
@@ -106,7 +110,7 @@ def test_get_overdue_loans_normalizes_library_name_before_rendering_query() -> N
     )
 
     assert result.library_name == CENTRAL_LIBRARY
-    assert graph_client.queries == [render_overdue_loans(CENTRAL_LIBRARY, AS_OF)]
+    assert graph_client.bindings == [{"library_name": CENTRAL_LIBRARY, "as_of": AS_OF}]
 
 
 def test_get_overdue_loans_uses_explicit_utc_as_of_in_query() -> None:
@@ -122,8 +126,8 @@ def test_get_overdue_loans_uses_explicit_utc_as_of_in_query() -> None:
     )
 
     assert result.as_of == explicit_as_of
-    assert graph_client.queries == [
-        render_overdue_loans(CENTRAL_LIBRARY, explicit_as_of)
+    assert graph_client.bindings == [
+        {"library_name": CENTRAL_LIBRARY, "as_of": explicit_as_of}
     ]
 
 
@@ -142,7 +146,9 @@ def test_get_overdue_loans_uses_current_utc_when_as_of_is_absent(
     )
 
     assert result.as_of == CURRENT_UTC
-    assert graph_client.queries == [render_overdue_loans(CENTRAL_LIBRARY, CURRENT_UTC)]
+    assert graph_client.bindings == [
+        {"library_name": CENTRAL_LIBRARY, "as_of": CURRENT_UTC}
+    ]
 
 
 @pytest.mark.parametrize(
@@ -164,3 +170,4 @@ def test_get_overdue_loans_rejects_non_utc_explicit_as_of(
         )
 
     assert graph_client.queries == []
+    assert graph_client.bindings == []

@@ -35,9 +35,9 @@ WHERE {
         ?borrower a lib:Borrower ;
             dcterms:identifier ?borrower_id ;
             person:fullName ?borrower_name .
-        ?library lib:name {{ library_name }} .
+        ?library lib:name ?library_name .
 
         FILTER NOT EXISTS { ?loan lib:returnedAt ?returned_at . }
-        FILTER(?due_at < {{ as_of }})
+        FILTER(?due_at < ?as_of)
     }
 }
