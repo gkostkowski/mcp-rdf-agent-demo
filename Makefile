@@ -5,7 +5,7 @@ COMPOSE := docker compose -f $(COMPOSE_FILE)
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install test test-unit test-integration demo-up up down logs ps graphdb-load graphdb-smoke down-volumes
+.PHONY: help install test test-unit test-integration demo-up up down logs ps mcp-logs langflow-logs graphdb-load graphdb-smoke down-volumes
 
 help:
 	@printf '%s\n' 'Available targets:'
@@ -13,11 +13,13 @@ help:
 	@printf '%s\n' '  test           Run all Python tests'
 	@printf '%s\n' '  test-unit      Run tests that do not require GraphDB'
 	@printf '%s\n' '  test-integration Run tests requiring a local GraphDB instance'
-	@printf '%s\n' '  demo-up        Start the currently available demo services'
+	@printf '%s\n' '  demo-up        Start GraphDB, MCP, and Langflow'
 	@printf '%s\n' '  up             Start normal services'
 	@printf '%s\n' '  down           Stop normal services'
 	@printf '%s\n' '  logs           Follow service logs'
 	@printf '%s\n' '  ps             Show service status'
+	@printf '%s\n' '  mcp-logs       Follow MCP service logs'
+	@printf '%s\n' '  langflow-logs  Follow Langflow service logs'
 	@printf '%s\n' '  graphdb-load   DESTRUCTIVE: reset and load library-demo'
 	@printf '%s\n' '  graphdb-smoke  Verify GraphDB and both named graphs'
 	@printf '%s\n' '  down-volumes   DESTRUCTIVE: stop services and remove volumes'
@@ -47,6 +49,12 @@ logs:
 
 ps:
 	$(COMPOSE) ps
+
+mcp-logs:
+	$(COMPOSE) logs -f mcp
+
+langflow-logs:
+	$(COMPOSE) logs -f langflow
 
 graphdb-load:
 	@printf '%s\n' 'This deletes and reloads the library-demo repository.'
