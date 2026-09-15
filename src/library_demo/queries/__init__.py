@@ -1,1 +1,1 @@
-"""Developer-authored SPARQL query templates."""
+"""SPARQL query templates."""
