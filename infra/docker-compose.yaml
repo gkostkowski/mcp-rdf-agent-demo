@@ -1,0 +1,32 @@
+name: library-demo
+
+services:
+  graphdb:
+    image: ontotext/graphdb:11.5.0
+    ports:
+      - "127.0.0.1:7200:7200"
+    environment:
+      GDB_JAVA_OPTS: >-
+        -Dgraphdb.home=/opt/graphdb/home
+        -Dgraphdb.workbench.importDirectory=/opt/graphdb/import
+    volumes:
+      - graphdb-data:/opt/graphdb/home
+      - ./graphdb/graphdb.license:/opt/graphdb/home/conf/graphdb.license:ro
+      - ../vocab:/opt/graphdb/import/vocab:ro
+      - ../data:/opt/graphdb/import/data:ro
+
+  graphdb-loader:
+    build:
+      context: ./graphdb
+      dockerfile: loader.Dockerfile
+    profiles:
+      - loader
+    environment:
+      GRAPHDB_URL: http://graphdb:7200
+      REPOSITORY_ID: library-demo
+      REPOSITORY_CONFIG: /config/repository-config.ttl
+    volumes:
+      - ./graphdb/repository-config.ttl:/config/repository-config.ttl:ro
+
+volumes:
+  graphdb-data:

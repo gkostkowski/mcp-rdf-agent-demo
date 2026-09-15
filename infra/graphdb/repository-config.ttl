@@ -1,0 +1,20 @@
+@prefix graphdb: <http://www.ontotext.com/config/graphdb#> .
+@prefix rep: <http://www.openrdf.org/config/repository#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sail: <http://www.openrdf.org/config/sail#> .
+@prefix sr: <http://www.openrdf.org/config/repository/sail#> .
+
+[] a rep:Repository ;
+    rep:repositoryID "library-demo" ;
+    rdfs:label "Library demo" ;
+    rep:repositoryImpl [
+        rep:repositoryType "graphdb:SailRepository" ;
+        sr:sailImpl [
+            sail:sailType "graphdb:Sail" ;
+            graphdb:ruleset "empty" ;
+            graphdb:enable-context-index "true" ;
+            graphdb:enablePredicateList "true" ;
+            graphdb:enable-literal-index "true" ;
+            graphdb:in-memory-literal-properties "true"
+        ]
+    ] .
