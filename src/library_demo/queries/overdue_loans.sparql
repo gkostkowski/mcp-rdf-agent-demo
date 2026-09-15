@@ -1,0 +1,43 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX lib: <http://library-demo.com/ontology#>
+PREFIX person: <http://www.w3.org/ns/person#>
+
+CONSTRUCT {
+    ?loan a lib:Loan ;
+        lib:loanedCopy ?book_copy ;
+        lib:dueAt ?due_at ;
+        lib:madeUnderMembership ?membership .
+    ?book_copy a lib:BookCopy ;
+        lib:bookCopyId ?book_copy_id ;
+        lib:represents ?book .
+    ?book a lib:Book ;
+        lib:title ?book_title .
+    ?membership a lib:LibraryMembership ;
+        lib:belongsToBorrower ?borrower .
+    ?borrower a lib:Borrower ;
+        dcterms:identifier ?borrower_id ;
+        person:fullName ?borrower_name .
+}
+WHERE {
+    GRAPH <http://library-demo.com/graph/data> {
+        ?loan a lib:Loan ;
+            lib:loanedCopy ?book_copy ;
+            lib:dueAt ?due_at ;
+            lib:madeUnderMembership ?membership .
+        ?book_copy a lib:BookCopy ;
+            lib:bookCopyId ?book_copy_id ;
+            lib:represents ?book ;
+            lib:heldByLibrary ?library .
+        ?book a lib:Book ;
+            lib:title ?book_title .
+        ?membership a lib:LibraryMembership ;
+            lib:belongsToBorrower ?borrower .
+        ?borrower a lib:Borrower ;
+            dcterms:identifier ?borrower_id ;
+            person:fullName ?borrower_name .
+        ?library lib:name {{ library_name }} .
+
+        FILTER NOT EXISTS { ?loan lib:returnedAt ?returned_at . }
+        FILTER(?due_at < {{ as_of }})
+    }
+}
