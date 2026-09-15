@@ -1,0 +1,33 @@
+[project]
+name = "library-demo"
+version = "0.1.0"
+description = "Library GraphDB MCP demo"
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "fastmcp>=2.0,<3.0",
+    "SPARQLWrapper>=2.0.0,<3.0.0",
+    "rdflib>=7.0.0,<8.0.0",
+    "PyLD>=2.0.3,<3.0.0",
+    "pydantic>=2.0,<3.0",
+]
+
+[project.scripts]
+library-demo-mcp = "library_demo.entrypoints.mcp:main"
+
+[tool.poetry]
+packages = [{ include = "library_demo", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+pytest-bdd = "^8.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: tests that require a running local GraphDB instance",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
