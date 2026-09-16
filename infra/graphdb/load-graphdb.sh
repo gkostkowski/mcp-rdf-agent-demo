@@ -8,7 +8,7 @@ readonly VOCAB_GRAPH="http://library-demo.com/graph/vocab"
 readonly DATA_GRAPH="http://library-demo.com/graph/data"
 readonly ONTOLOGY_FILE="vocab/ontology/library_full.owl"
 readonly VOCABULARY_FILE="vocab/library-cv.ttl"
-readonly DATA_FILE="data/library-s-v2.ttl"
+readonly DATA_FILE="data/library-s.ttl"
 readonly RETRY_COUNT=60
 readonly RETRY_DELAY_SECONDS=2
 
