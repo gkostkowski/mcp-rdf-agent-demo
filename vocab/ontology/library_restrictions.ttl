@@ -12,7 +12,7 @@
     rdfs:range :Borrower .
 
 :core-restriction a owl:Ontology ;
-    dcterms:created "2026-07-09"^^xsd:date ;
+    dcterms:created "2026-09-15"^^xsd:date ;
     dcterms:issued "2026-09-15"^^xsd:date ;
     dcterms:license "CC BY 4.0" ;
     dcterms:publisher "GK" ;
@@ -20,11 +20,9 @@
     vann:preferredNamespacePrefix "lib" ;
     vann:preferredNamespaceUri "http://library-demo.com/ontology#" ;
     rdfs:comment "This version is automatically generated from library.xml on 2026-09-15" ;
-    owl:imports <http://data.europa.eu/m8g>,
-        :core,
+    owl:imports :core,
         dcterms:,
-        skos:,
-        <http://www.w3.org/ns/adms> ;
+        skos: ;
     owl:versionIRI :core-restriction-1.0.0 ;
     owl:versionInfo "1.0.0" .
 
