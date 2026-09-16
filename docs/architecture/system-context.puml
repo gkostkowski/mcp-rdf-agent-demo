@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+
+title Library Demo - Context Diagram
+LAYOUT_LEFT_RIGHT()
+
+Person(library_administrator, "Library Administrator", "Asks library-loan questions and receives factual answers.")
+System(library_demo, "Library Demo", "Provides controlled access to library-loan information.")
+
+Rel(library_administrator, library_demo, "Asks questions and receives answers")
+
+@enduml

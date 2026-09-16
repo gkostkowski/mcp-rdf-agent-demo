@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+
+title Library Demo - Container Diagram
+LAYOUT_LEFT_RIGHT()
+
+Person(library_administrator, "Library Administrator", "Asks library-loan questions and receives factual answers.")
+
+System_Boundary(library_demo_boundary, "Library Demo") {
+    Container(langflow_agent, "Library Administration Agent", "Langflow", "Interprets requests, selects supported tools, and presents factual answers.")
+    Container(mcp_query_service, "Library Query Service", "Python, FastMCP", "Exposes supported query tools and returns structured results.")
+    ContainerDb(graphdb, "Library Data Store", "GraphDB", "Stores RDF library-loan data.")
+}
+
+Rel(library_administrator, langflow_agent, "Asks library-loan questions")
+Rel(langflow_agent, mcp_query_service, "Invokes supported tools", "MCP")
+Rel(mcp_query_service, graphdb, "Runs fixed queries", "SPARQL")
+Rel(mcp_query_service, langflow_agent, "Returns structured query results", "MCP")
+Rel(langflow_agent, library_administrator, "Presents factual answers")
+
+@enduml
