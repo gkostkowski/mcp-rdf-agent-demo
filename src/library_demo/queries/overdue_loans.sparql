@@ -20,24 +20,23 @@ CONSTRUCT {
 }
 WHERE {
     GRAPH <http://library-demo.com/graph/data> {
-        ?loan a lib:Loan ;
-            lib:loanedCopy ?book_copy ;
-            lib:dueAt ?due_at ;
-            lib:madeUnderMembership ?membership .
+        ?library lib:name ?library_name .
         ?book_copy a lib:BookCopy ;
             lib:bookCopyId ?book_copy_id ;
             lib:represents ?book ;
             lib:heldByLibrary ?library .
-        ?book a lib:Book ;
-            lib:title ?book_title .
+        ?loan a lib:Loan ;
+            lib:loanedCopy ?book_copy ;
+            lib:dueAt ?due_at ;
+            lib:madeUnderMembership ?membership .
+        FILTER NOT EXISTS { ?loan lib:returnedAt ?returned_at . }
+        FILTER(?due_at < ?as_of)
         ?membership a lib:LibraryMembership ;
             lib:belongsToBorrower ?borrower .
         ?borrower a lib:Borrower ;
             dcterms:identifier ?borrower_id ;
             person:fullName ?borrower_name .
-        ?library lib:name ?library_name .
-
-        FILTER NOT EXISTS { ?loan lib:returnedAt ?returned_at . }
-        FILTER(?due_at < ?as_of)
+        ?book a lib:Book ;
+            lib:title ?book_title .
     }
 }
