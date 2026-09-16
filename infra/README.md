@@ -1,7 +1,7 @@
 # Local Infrastructure
 
 `docker-compose.yaml` defines the local services. GraphDB data lives in the
-Compose-managed `graphdb-data` volume; it is not stored in the working tree.
+Compose-managed `graphdb-data` volume.
 
 GraphDB 11.5.0 requires a license. Request a GraphDB Free license and place it
 at `infra/graphdb/graphdb.license`. This path is ignored by Git and is mounted
