@@ -1,0 +1,35 @@
+@startuml
+
+|User|
+start
+:Ask:
+"Which books are overdue
+in Central Library?";
+
+|Langflow Agent|
+:Select tool
+get_overdue_loans(
+library=LIBRARY_NAME
+);
+
+|FastMCP Server|
+:Validate / resolve parameters;
+:Instantiate SPARQL template;
+
+|GraphDB|
+:Execute SELECT query;
+
+|FastMCP Server|
+:Parse SPARQL results;
+:Transform results into
+tool response;
+
+|Langflow Agent|
+:Interpret tool result;
+:Generate natural-language answer;
+
+|User|
+:Receive answer;
+stop
+
+@enduml
