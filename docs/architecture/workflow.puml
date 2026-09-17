@@ -17,7 +17,7 @@ library=LIBRARY_NAME
 :Instantiate SPARQL template;
 
 |GraphDB|
-:Execute SELECT query;
+:Execute CONSTRUCT query;
 
 |FastMCP Server|
 :Parse SPARQL results;

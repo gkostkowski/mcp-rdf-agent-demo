@@ -6,7 +6,7 @@ readonly REPOSITORY_ID="${REPOSITORY_ID:-library-demo}"
 readonly REPOSITORY_CONFIG="${REPOSITORY_CONFIG:-/config/repository-config.ttl}"
 readonly VOCAB_GRAPH="http://library-demo.com/graph/vocab"
 readonly DATA_GRAPH="http://library-demo.com/graph/data"
-readonly ONTOLOGY_FILE="vocab/ontology/library_full.owl"
+readonly ONTOLOGY_FILE="vocab/ontology/library.ttl"
 readonly VOCABULARY_FILE="vocab/library-cv.ttl"
 readonly DATA_FILE="data/library-s.ttl"
 readonly RETRY_COUNT=60
@@ -98,7 +98,7 @@ import_file() {
 smoke_check() {
     query='ASK {
       GRAPH <http://library-demo.com/graph/vocab> {
-        <http://library-demo.com/ontology> ?ontologyPredicate ?ontologyObject .
+        <http://library-demo.com/ontology#core> ?ontologyPredicate ?ontologyObject .
         <http://library-demo.com/ontology#BookCopyAvailabilityStatus> ?vocabularyPredicate ?vocabularyObject
       }
       GRAPH <http://library-demo.com/graph/data> { ?dataSubject ?dataPredicate ?dataObject }

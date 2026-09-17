@@ -5,7 +5,7 @@ Compose-managed `graphdb-data` volume.
 
 GraphDB 11.5.0 requires a license. Request a GraphDB Free license and place it
 at `infra/graphdb/graphdb.license`. This path is ignored by Git and is mounted
-read-only into GraphDB; do not commit or share the license file.
+read-only into GraphDB. Do not commit or share the license file.
 
 Start GraphDB and open Workbench at <http://127.0.0.1:7200>:
 
@@ -20,8 +20,8 @@ make graphdb-load
 ```
 
 This command deletes the complete repository before recreating it. It places
-`vocab/ontology/library_full.owl` and `vocab/library-cv.ttl` in
-`http://library-demo.com/graph/vocab`, and `data/library-xs.ttl` in
+`vocab/ontology/library.ttl` and `vocab/library-cv.ttl` in
+`http://library-demo.com/graph/vocab`, and `data/library-s.ttl` in
 `http://library-demo.com/graph/data`. Normal service restarts do not reload
 data.
 
