@@ -1,4 +1,4 @@
-# Library Demo
+# Library Query Assistant Demo
 
 ## Scope
 
